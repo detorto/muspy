@@ -12,7 +12,7 @@ from GUI import *
 if __name__ == '__main__':
 
 	print "Hello! Login please!";
-
+	print "\n"
 	login = raw_input("Login: ");
 	password = getpass.getpass("Password:");
 
