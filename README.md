@@ -1,4 +1,7 @@
 muspy
 =====
 
-Musical player for vk social network. Console only.
+Console audio player for VK.com.
+
+Requires vkapputh and pygst packages.
+
