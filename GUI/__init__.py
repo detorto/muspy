@@ -193,6 +193,7 @@ class PlainUI():
 						 	"srch" : self._search,
 						 	"i" : self._info,
 						 	"lir": self._print_lirics,
+						 	"rcm": self._recomendations,
 						 }
 
 		#allways need a default friend, who is id is yours
@@ -333,7 +334,7 @@ class PlainUI():
 		self._print_list(printabledata,len(printabledata));
 
 	def _recomendations(self,params):
-		music = self._session.get_audios("recomendations");
+		music = self._session.get_audios("recomendations",[]);
 		printabledata = [printable_music_info(m) for m in music];
 		self._print_list(printabledata,params[1:]);
 
