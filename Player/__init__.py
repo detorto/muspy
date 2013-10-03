@@ -5,8 +5,9 @@ pygst.require("0.10")
 
 import gst
 import gtk
+import threading
 
-class Player():
+class Player(threading.Thread):
 
 	CB_SONG_END = "songend"
 	CB_SONG_PAUSE = "songpause"
@@ -15,6 +16,7 @@ class Player():
 	CB_SONG_ERROR = "songerror"
 
 	def __init__(self):
+		threading.Thread.__init__(self)
 		self._music_stream_url = None;
 		self._player = gst.element_factory_make("playbin2", "player")
 
@@ -29,6 +31,11 @@ class Player():
 					 		Player.CB_SONG_PLAY : self._empty_callback,
 					 		Player.CB_SONG_ERROR : self._empty_callback }
 
+		self.start();
+
+	def run(self):
+		gtk.gdk.threads_init()
+		gtk.main()
 	def _empty_callback(self):
 		pass
 
@@ -80,3 +87,5 @@ class Player():
 
 	def set_url(self, url):
 		self._music_stream_url = url
+	def exit(self):
+		gtk.main_quit()

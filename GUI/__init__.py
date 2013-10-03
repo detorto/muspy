@@ -53,6 +53,8 @@ class TerminalProcessor(threading.Thread):
 		self.filler_count  = 0;
 		self.working = True;
 		self.err_msg = "";
+		self.prevtime = 0
+		self.curtime = 0
 
 	def stop(self):
 		self.working = False;
@@ -114,6 +116,7 @@ class TerminalProcessor(threading.Thread):
 				if self.err_msg != "":
 					self.filler_count = len(self.err_msg)
 					self.err_msg = "";
+				return
 
 		self.command_buffer.insert(len(self.command_buffer)+self.cursorpos,ch[0])
 
@@ -130,6 +133,9 @@ class TerminalProcessor(threading.Thread):
 		for i in xrange(count):
 			seq=seq+"\033[1D"
 		return seq
+	def reset(self):
+		self.prevtime = self.curtime = 0;
+		self.curtime = 0;
 
 	def update(self):
 		import readline
@@ -269,6 +275,7 @@ class PlainUI():
 
 		for i in xrange(n):
 			self._controller.next_song();
+		self.term_processor.reset()
 
 	def _prev (self, params):
 		n = 1
@@ -279,6 +286,7 @@ class PlainUI():
 
 		for i in xrange(n):
 			self._controller.prev_song();
+		self.term_processor.reset()
 
 
 	def _list_friends (self, params = []):
@@ -362,16 +370,16 @@ class PlainUI():
 
 
 	def process_ui(self):
-		#self.term_processor.start()
+		self.term_processor.start()
 		while True:
 			#cmd = raw_input()
-			#cmd = self.term_processor.get_command();
-			self.term_processor.update()
+			cmd = self.term_processor.get_command();
+			#self.term_processor.update()
 
-			cmd = None;
+			#cmd = None;
 
-			if self.term_processor.command_ready:
-				cmd = self.term_processor.get_command()
+			#if self.term_processor.command_ready:
+			#	cmd = self.term_processor.get_command()
 
 			if cmd == "exit":
 				return;
@@ -385,3 +393,4 @@ class PlainUI():
 
 	def end_ui(self):
 		self.term_processor.stop();
+		del self._controller;

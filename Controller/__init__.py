@@ -90,3 +90,5 @@ class Controller():
 
 	def get_session(self):
 		return self._session;
+	def __del__(self):
+		self._player.exit();
